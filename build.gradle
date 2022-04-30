@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'org.cambural21.solidity.wrapper'
+version '0.1'
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation 'org.web3j:hosted-providers:5.0.0'
+    implementation 'org.web3j:crypto:5.0.0'
+    implementation 'org.web3j:core:5.0.0'
+
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+
+    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
+    implementation 'com.google.zxing:javase:3.3.3'
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'org.json:json:20220320'
+}
+
+test {
+    useJUnitPlatform()
+}
