@@ -19,3 +19,8 @@ Supported Signature Generators:
 
 ERC-712: Ethereum typed structured data hashing and signing</br>
 ERC-2612: permit – 712-signed approvals</br></br>
+
+Releases:
+====
+
+[SolidityWrapper v0.1](https://github.com/Cambural21/Solidity-Wrapper/releases/download/RELEASE/SolidityWrapper.jar)
