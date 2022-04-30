@@ -202,6 +202,31 @@ public final class EIP712 {
                     final byte[] S = vrs.getS();
                     result = new IEIP2612Permit() {
                         @Override
+                        public BigInteger getDeadline() {
+                            return deadline;
+                        }
+
+                        @Override
+                        public BigInteger getValue() {
+                            return null;
+                        }
+
+                        @Override
+                        public BigInteger getNonce() {
+                            return nonce;
+                        }
+
+                        @Override
+                        public String getSpender() {
+                            return spender;
+                        }
+
+                        @Override
+                        public String getOwner() {
+                            return owner;
+                        }
+
+                        @Override
                         public BigInteger getV() {
                             return V;
                         }
@@ -277,6 +302,11 @@ public final class EIP712 {
     }
 
     public interface IEIP2612Permit {
+        BigInteger getDeadline();
+        BigInteger getValue();
+        BigInteger getNonce();
+        String getSpender();
+        String getOwner();
         BigInteger getV();
         byte[] getR();
         byte[] getS();
