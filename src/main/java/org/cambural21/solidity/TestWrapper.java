@@ -1,77 +1,31 @@
 package org.cambural21.solidity;
 
+import javafx.util.Pair;
+import org.cambural21.solidity.manager.contracts.TantalumToken;
 import org.cambural21.solidity.utils.Sqlite;
 import org.cambural21.solidity.wrapper.Blockchain;
+import org.cambural21.solidity.wrapper.Feature;
 import org.cambural21.solidity.wrapper.LoggingLevel;
 import org.cambural21.solidity.wrapper.Wrapper;
 import org.cambural21.solidity.wrapper.credentials.CredentialHelper;
+import org.cambural21.solidity.wrapper.interfaces.IERC;
 import org.web3j.crypto.Credentials;
 import org.web3j.tx.ChainId;
 import org.web3j.tx.Contract;
 
 import java.io.File;
 import java.sql.Connection;
+import java.util.Map;
 
 public class TestWrapper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    private static void wrapper(Blockchain blockchain, Credentials credentials, Class contractCls, String contractAddress) {
+    private static Pair<Wrapper, Map<Feature, IERC>> features(Blockchain blockchain, Credentials credentials,
+                                                              String contractAddress, Class contractCls){
         Wrapper wrapper = Wrapper.getInstance(blockchain, credentials);
-
-        //TODO DEPLOY
-        {
-            Contract contract = wrapper.deploy(contractCls, true);
-            System.out.println("contractAddress: " + contract.getContractAddress());
-        }
-
-        //TODO LOAD & TRANSFER
-        /*{
-            Map<Feature, IERC> features = wrapper.loadFeatures(contractCls, contractAddress, Feature.IERC2612, Feature.IERC20);
-            IERC2612 ierc2612 = (IERC2612)features.get(Feature.IERC2612);
-            IERC20 ierc20 = (IERC20)features.get(Feature.IERC20);
-
-            EIP712 eip712Generator = EIP712.getEIP712("TANTALUS", "1", (byte)4, contractAddress);
-            BigInteger deadline = Cast.toDateBigInteger("22-01-2030 10:15:55 AM");;
-            BigInteger value = BigInteger.ONE;
-            String spender = "";
-            String owner = "";
-
-            BigInteger nonce = null;
-            {
-                try{
-                    nonce = ierc2612.nonces(owner);
-                }catch (Exception e){
-                    e.printStackTrace();
-                    nonce = null;
-                }
-            }
-
-            EIP712.IEIP2612Permit permit = eip712Generator.getEIP2612Permit(wrapper, owner, spender, nonce, value, deadline);
-            BigInteger V = permit.getV();
-            byte[] R = permit.getR();
-            byte[] S = permit.getS();
-
-            TransactionReceipt transactionReceiptPermit = null;
-            try{
-                transactionReceiptPermit = ierc2612.permit(owner, spender, value, deadline, V, R, S);
-            }catch (Exception e){
-                e.printStackTrace();
-                transactionReceiptPermit = null;
-            }
-
-            Boolean transfer = null;
-            try{
-                transfer = ierc20.transferFrom(owner, spender, value);;
-            }catch (Exception e){
-                e.printStackTrace();
-                transfer = null;
-            }
-
-            wrapper.shutdown();
-        }*/
-
-        System.out.println();
+        Map<Feature, IERC> features = wrapper != null?wrapper.loadFeatures(contractCls, contractAddress, Feature.IERC2612, Feature.IERC20):null;
+        return wrapper != null && features != null?new Pair<Wrapper, Map<Feature, IERC>>(wrapper, features):null;
     }
 
     private static File saveCredentials(Credentials credentials, String password) {
@@ -153,6 +107,8 @@ public class TestWrapper {
         Connection connection = sqlite.open(db);
         return connection;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static void main(String[] args) {
         String privateKey = "", infuraKey = "", contractAddressToLoad = "";
